@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "GUI_Functions.h"
 #include "Buttons.h"
+#include "Test_Cable.h"
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
 // double up the pins with the touch screen (see the TFT paint example).
@@ -37,6 +38,7 @@ ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_
                              
 void setup(void) {
   Serial.begin(9600);
+  TestCable_Unit();
   Serial.println(F("TFT LCD test"));
 
 #ifdef USE_Elegoo_SHIELD_PINOUT
