@@ -6,6 +6,7 @@
 #include <Elegoo_TFTLCD.h> // Hardware-specific library
 #include <TouchScreen.h>
 #include "Buttons.h"
+#include "Test_Cable.h"
 //---------------------------------------------------------------------------------------------------------------//
 // Assign human-readable names to some common 16-bit color values:
 #define	BLACK   0x0000

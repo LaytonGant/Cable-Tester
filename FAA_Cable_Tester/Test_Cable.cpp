@@ -1,5 +1,7 @@
 #include "Test_Cable.h"
 
+struct Results TestResults;
+
 // Set Number of Pins to Test
 const int numPins = 50;
 // Define the "run test" button
@@ -73,18 +75,11 @@ void TestCable(){
     if (foundPin == 0)
     {
       Serial.print(pin); Serial.print("-"); Serial.print("nothing :(\n");
-      //Serial.print("Input pin ");
-      //Serial.print(pin);
-      //Serial.print(" is connected to nothing. :(\n");
       srClockPulse();
     } else
       {
         Serial.print(pin); Serial.print("-"); Serial.print(foundPin); Serial.print("\n");
-        //Serial.print("Input pin ");
-        //Serial.print(pin);
-        //Serial.print(" is connected to output pin ");
-        //Serial.print(foundPin);
-        //Serial.print(".\n");
+        TestResults.pi[1][pin-1] = foundPin;
         srClockPulse();
       }
     }

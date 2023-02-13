@@ -74,7 +74,10 @@ for (uint8_t b=0; b<4; b++) {
           }
       }
       else if(buttons[b].justReleased()==buttons[3].justReleased()){
-            buttons[b].drawButton();
+          Change = true;
+          pages = 1;
+          TestCable();
+          UpdateSceen(buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
       }
     }
     
