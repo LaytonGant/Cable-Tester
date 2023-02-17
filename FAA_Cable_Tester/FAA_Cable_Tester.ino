@@ -3,9 +3,12 @@
 #include <Elegoo_TFTLCD.h> // Hardware-specific library
 #include <TouchScreen.h>
 #include <stdio.h>
+#include <string.h>
 #include "GUI_Functions.h"
 #include "Buttons.h"
 #include "Test_Cable.h"
+#include "Results.h"
+#include "Cable_Definition.h"
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
 // double up the pins with the touch screen (see the TFT paint example).

@@ -1,7 +1,22 @@
 #include "Test_Cable.h"
-
-struct Results TestResults;
-
+// Creation of Classes
+struct Results testresults;
+struct CableDef RJ45A;
+RJ45A.pin[] = {1; 2; 3; 4; 5; 6; 7; 8};
+RJ45A.shielding = true;
+/*struct CableDef RJ45B;
+struct CableDef RJ11;
+struct CableDef RJ12UTP;
+struct CableDef RJ21;
+struct CableDef D_sub9;
+struct CableDef D_sub15;
+struct CableDef D_sub25;
+struct CableDef HD_sub15;
+struct CableDef USBA;
+struct CableDef USBB;
+struct CableDef USBMini;
+struct CableDef Amphenol;
+*/
 // Set Number of Pins to Test
 const int numPins = 50;
 // Define the "run test" button
@@ -79,7 +94,7 @@ void TestCable(){
     } else
       {
         Serial.print(pin); Serial.print("-"); Serial.print(foundPin); Serial.print("\n");
-        TestResults.pi[1][pin-1] = foundPin;
+        testresults.pin[pin-1] = foundPin;
         srClockPulse();
       }
     }

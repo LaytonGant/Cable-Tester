@@ -2,6 +2,8 @@
 #define TEST_CABLE_H
 #include <Arduino.h>
 #include "Results.h"
+#include "Cable_Definition.h"
+#include "Results.h"
 
 // Function Prototypes
 void TestCable_Unit(void);
