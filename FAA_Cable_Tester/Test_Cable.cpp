@@ -1,22 +1,23 @@
 #include "Test_Cable.h"
+
 // Creation of Classes
-struct Results testresults;
-struct CableDef RJ45A;
-RJ45A.pin[] = {1; 2; 3; 4; 5; 6; 7; 8};
-RJ45A.shielding = true;
-/*struct CableDef RJ45B;
-struct CableDef RJ11;
-struct CableDef RJ12UTP;
-struct CableDef RJ21;
-struct CableDef D_sub9;
-struct CableDef D_sub15;
-struct CableDef D_sub25;
-struct CableDef HD_sub15;
-struct CableDef USBA;
-struct CableDef USBB;
-struct CableDef USBMini;
-struct CableDef Amphenol;
-*/
+Results testresults;
+CableDef RJ45A = {{1, 2, 3, 4, 5, 6, 7, 8}, true};
+CableDef RJ45B = {{1, 2, 3, 4, 5, 6, 7, 8}, true};
+CableDef RJ11 = {{1, 2, 3, 4, 5, 6}, true}; // NOTE: This one varies between 4-6 pins? Check.
+CableDef RJ12STP = {{1, 2, 3, 4, 5, 6}, true};
+CableDef RJ12UTP = {{1, 2, 3, 4, 5, 6}, false};
+CableDef RJ21STP = {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50}, true};
+CableDef RJ21UTP = {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50}, false};
+CableDef D_sub9 = {{1, 2, 3, 4, 5, 6, 7, 8, 9}, true};
+CableDef D_sub15 = {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, true};
+CableDef D_sub25 = {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}, true};
+CableDef HD_sub15 = {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, true};
+CableDef USBA = {{1, 2, 3, 4}, true};
+CableDef USBB = {{1, 2, 3, 4}, true};
+CableDef USBMini = {{1, 2, 3, 4, 5}, true};
+//CableDef Amphenol;
+
 // Set Number of Pins to Test
 const int numPins = 50;
 // Define the "run test" button

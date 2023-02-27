@@ -93,7 +93,6 @@ void setup(void) {
   drawplate(buttons, tft, buttoncolors, buttonlabels);
   createHomeButtons(buttons, tft, buttoncolors, buttonlabels);
   createCableButtons(cables, tft, cablecolors, cablelabels);
-
 }
 
 void loop(void) {

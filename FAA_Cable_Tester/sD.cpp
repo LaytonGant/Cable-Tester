@@ -1,7 +1,7 @@
 /*
 This is the basic sD card test I have that uses the LCD, MEGA, and sD module all together
 I need to integrate this into the rest of our GUI 
-*/
+
 
 #include <SPI.h>
 #include <SD.h>
@@ -138,5 +138,5 @@ void loop() {
   delay(1000);delay(1000);delay(1000);delay(1000);delay(1000);
  
 }
-
+*/
 

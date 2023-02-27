@@ -77,7 +77,7 @@ for (uint8_t b=0; b<4; b++) {
           Change = true;
           pages = 1;
           TestCable();
-          UpdateSceen(buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+          UpdateScreen(buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
       }
     }
     
