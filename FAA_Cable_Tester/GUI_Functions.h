@@ -7,6 +7,7 @@
 #include <TouchScreen.h>
 #include "Buttons.h"
 #include "Test_Cable.h"
+#include "Results.h"
 //---------------------------------------------------------------------------------------------------------------//
 // Assign human-readable names to some common 16-bit color values:
 #define	BLACK   0x0000
