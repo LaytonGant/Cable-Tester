@@ -3,7 +3,7 @@
 //I need to integrate this into the rest of our GUI 
 #include "sD_Module.h" 
 
-File cableFile;
+File resultsFile, cableFile;
 String var;
 int firstPin;
 
@@ -19,24 +19,74 @@ void setup() {
 
 }
 
-void displayTest(struct Results, File cableFile) {
+void readCableInfo(struct Cables, File cableFile){
+
+  CableDef cablelist[10];
+
+  cableFile = SD.open("cables.txt");
+  if (cableFile) {
+    Serial.println("cables.txt:");
+    cablecount = 1;
+
+    // read from the file until there's nothing else in it:
+    while (cableFile.available()) {
+      cable = ' ';
+      shielding = ' ';
+      var = char(cableFile.read());
+      corPin = 0;
+      while(var != ','){
+        //Serial.print(var);
+        cable += var;
+        var = char(cableFile.read());
+      }
+      cablelist[cablecount].name = cable;
+      var = char(cableFile.read());
+      while(var != ',')
+      {
+        shielding += var;
+        var = char(cableFile.read());
+      }
+      cablelist[cablecount].shielding = shielding;
+      var = myFile.read();
+      while(var != '\n')
+      {
+        pins[corPin] = var;
+        //Serial.println(corPin);
+        //Serial.print(" = = ");
+        //Serial.print(pins[corPin]);
+        var = cableFile.read();
+        cablelist[cablecount].pin[corPin]=pins[corPin];
+        Serial.print(cablelist[cablecount].pin[corPin]);
+        corPin = corPin + 1;
+      }
+      Serial.println();
+      Serial.println("IN THE STRUCT");
+      Serial.println(cablelist[cablecount].name);
+      Serial.println(cablelist[cablecount].shielding);
+      cablecount = cablecount + 1;
+    }
+    cableFile.close();
+
+}
+
+void displayTest(struct Results, File resultsFile) {
   
   unsigned long start = micros();
 
   // re-open the file for reading:
-  cableFile = SD.open(Results.testname);
-  if (cableFile) {
+  resultsFile = SD.open(Results.testname);
+  if (resultsFile) {
     Serial.println("test.txt:");
 
     // read from the file until there's nothing else in it:
-    while (cableFile.available()) { // <><><><><>This needs to be integrated with the GUI to the History <><><><><>
-      var = char(cableFile.read());
+    while (resultsFile.available()) { // <><><><><>This needs to be integrated with the GUI to the History <><><><><>
+      var = char(resultsFile.read());
       Serial.println(var);
     }
     // close the file:
     Serial.println("End of File");
     Serial.println();
-    cableFile.close();
+    resultsFile.close();
   } else {
     // if the file didn't open, print an error:
     Serial.println("error opening test.txt");
@@ -45,25 +95,25 @@ void displayTest(struct Results, File cableFile) {
  
 }
 
-void writeTest(struct Results, File cableFile){
+void writeTest(struct Results, File resultsFile){
   
-  cableFile = SD.open(Results.testname, FILE_WRITE);
+  resultsFile = SD.open(Results.testname, FILE_WRITE);
   firstPin = 1;
 
   // if the file opened okay, write to it:
-  if (cableFile) {
+  if (resultsFile) {
     Serial.print("Writing to test.txt...");
-    cableFile.println(Results.cablename);
-    cableFile.println("Continuity:", Results.Continuity);
-    cableFile.println("Presense of Shielding:", Results.Shielding);
-    cableFile.println("Pin-to-pin Correct?:", Results.PinToPin);
+    resultsFile.println(Results.cablename);
+    resultsFile.println("Continuity:", Results.Continuity);
+    resultsFile.println("Presense of Shielding:", Results.Shielding);
+    resultsFile.println("Pin-to-pin Correct?:", Results.PinToPin);
     while(Results.pins){
-      cableFile.println(firstPin);
-      cableFile.print(Results.pins[firstPin-1]);
+      resultsFile.println(firstPin);
+      resultsFile.print(Results.pins[firstPin-1]);
       firstPin++;
     }
     // close the file:
-    cableFile.close();
+    resultsFile.close();
     Serial.println("Done writing to file.");
   } else {
     // if the file didn't open, print an error:
