@@ -2,7 +2,7 @@
 
 // Creation of Classes
 Results testresults;
-CableDef RJ45A = {{1, 2, 3, 4, 5, 6, 7, 8}, true};
+/* CableDef RJ45A = {{1, 2, 3, 4, 5, 6, 7, 8}, true};
 CableDef RJ45B = {{1, 2, 3, 4, 5, 6, 7, 8}, true};
 CableDef RJ11 = {{1, 2, 3, 4, 5, 6}, true}; // NOTE: This one varies between 4-6 pins? Check.
 CableDef RJ12STP = {{1, 2, 3, 4, 5, 6}, true};
@@ -17,6 +17,7 @@ CableDef USBA = {{1, 2, 3, 4}, true};
 CableDef USBB = {{1, 2, 3, 4}, true};
 CableDef USBMini = {{1, 2, 3, 4, 5}, true};
 //CableDef Amphenol;
+*/
 
 // Set Number of Pins to Test
 const int numPins = 50;

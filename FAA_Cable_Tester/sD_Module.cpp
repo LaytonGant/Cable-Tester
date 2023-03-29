@@ -16,17 +16,25 @@ void setup() {
     while (1);
   }
   Serial.println("initialization done.");
+  CableDef cables[50];
+  readCableInfo(cables);
 
 }
 
-void readCableInfo(struct Cables, File cableFile){
+void readCableInfo(struct CableDef cablelist[50]){
 
-  CableDef cablelist[10];
+
+  char var;
+  String cable, shielding;
+  int corPin, cablecount;
+  char pins[60];
+
 
   cableFile = SD.open("cables.txt");
   if (cableFile) {
     Serial.println("cables.txt:");
     cablecount = 1;
+
 
     // read from the file until there's nothing else in it:
     while (cableFile.available()) {
@@ -47,7 +55,7 @@ void readCableInfo(struct Cables, File cableFile){
         var = char(cableFile.read());
       }
       cablelist[cablecount].shielding = shielding;
-      var = myFile.read();
+      var = cableFile.read();
       while(var != '\n')
       {
         pins[corPin] = var;
@@ -68,20 +76,28 @@ void readCableInfo(struct Cables, File cableFile){
     cableFile.close();
 
 }
+else{
+  Serial.println("File not found.");
+}
+}
 
-void displayTest(struct Results, File resultsFile) {
+void displayTest(struct Results cableResult, File resultsFile) {
   
   unsigned long start = micros();
+  tft.setCursor(20, 60);
+  tft.setTextColor(SUBPLATE_TCOLOR);
+  tft.setTextSize(SUBPLATE_TSIZE);
+  
 
   // re-open the file for reading:
-  resultsFile = SD.open(Results.testname);
+  resultsFile = SD.open(cableResult.testname);
   if (resultsFile) {
-    Serial.println("test.txt:");
+    Serial.println("results file opened");
 
     // read from the file until there's nothing else in it:
     while (resultsFile.available()) { // <><><><><>This needs to be integrated with the GUI to the History <><><><><>
       var = char(resultsFile.read());
-      Serial.println(var);
+      tft.println(F(var));
     }
     // close the file:
     Serial.println("End of File");
@@ -90,27 +106,48 @@ void displayTest(struct Results, File resultsFile) {
   } else {
     // if the file didn't open, print an error:
     Serial.println("error opening test.txt");
-  }
-  delay(1000);delay(1000);delay(1000);delay(1000);delay(1000);
- 
+  } 
 }
 
-void writeTest(struct Results, File resultsFile){
-  
-  resultsFile = SD.open(Results.testname, FILE_WRITE);
+
+void writeTest(struct Results cableResult){
+ 
+  Serial.println(cableResult.testname);
+  File resultsFile = SD.open(cableResult.testname, FILE_WRITE);
+  //File resultsFile = SD.open("test.txt", FILE_WRITE);
   firstPin = 1;
+
 
   // if the file opened okay, write to it:
   if (resultsFile) {
     Serial.print("Writing to test.txt...");
-    resultsFile.println(Results.cablename);
-    resultsFile.println("Continuity:", Results.Continuity);
-    resultsFile.println("Presense of Shielding:", Results.Shielding);
-    resultsFile.println("Pin-to-pin Correct?:", Results.PinToPin);
-    while(Results.pins){
-      resultsFile.println(firstPin);
-      resultsFile.print(Results.pins[firstPin-1]);
-      firstPin++;
+    resultsFile.println(cableResult.cablename);
+    Serial.print("not yet stuck");
+    if(cableResult.Continuity == true){
+    resultsFile.println("Continuity: True");
+    } 
+    else{
+    resultsFile.println("Continuity: False");      
+    }
+
+    if(cableResult.Shielding == true){
+      resultsFile.println("Presense of Shielding: True");
+    }
+    else{
+      resultsFile.println("Presense of Shielding: False");
+    }
+
+    if(cableResult.PinToPin == true){
+      resultsFile.println("Pin-to-Pin Connections Correct?: True");
+    }
+    else{
+      resultsFile.println("Pin-to-Pin Connections Correct?: False");
+    }
+
+    while(cableResult.pin[firstPin-1] != 0){
+     resultsFile.println(firstPin);
+     resultsFile.print(cableResult.pin[firstPin-1]);
+     firstPin++;
     }
     // close the file:
     resultsFile.close();
@@ -120,3 +157,4 @@ void writeTest(struct Results, File resultsFile){
     Serial.println("Error opening test.txt");
   }
 }
+
