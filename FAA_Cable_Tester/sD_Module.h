@@ -7,10 +7,13 @@
 #include <SD.h>
 #include <Elegoo_GFX.h>    // Core graphics library
 #include <Elegoo_TFTLCD.h> // Hardware-specific library
+#include <TouchScreen.h>
+#include "GUI_Functions.h"
 #include "Results.h"
+#include "Cable_Definition.h"
 
-
-void displayTest(struct Results, File cableFile);
+void readCableInfo(struct CableDef cablelist[50]);
+void displayTest(struct Results, Elegoo_TFTLCD tft, File cableFile);
 void writeTest(struct Results, File cableFile);
 
 #endif

@@ -22,8 +22,6 @@ void setup() {
 }
 
 void readCableInfo(struct CableDef cablelist[50]){
-
-
   char var;
   String cable, shielding;
   int corPin, cablecount;
@@ -75,13 +73,13 @@ void readCableInfo(struct CableDef cablelist[50]){
     }
     cableFile.close();
 
-}
-else{
-  Serial.println("File not found.");
-}
+  }
+  else{
+    Serial.println("File not found.");
+  }
 }
 
-void displayTest(struct Results cableResult, File resultsFile) {
+void displayTest(struct Results cableResult, Elegoo_TFTLCD tft, File resultsFile) {
   
   unsigned long start = micros();
   tft.setCursor(20, 60);
