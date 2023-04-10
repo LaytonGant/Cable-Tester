@@ -9,6 +9,8 @@
 #include "Test_Cable.h"
 #include "Results.h"
 #include "Cable_Definition.h"
+#include "Cable_Definition.h"
+#include "sD_Module.h"
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
 // double up the pins with the touch screen (see the TFT paint example).
@@ -93,6 +95,17 @@ void setup(void) {
   drawplate(buttons, tft, buttoncolors, buttonlabels);
   createHomeButtons(buttons, tft, buttoncolors, buttonlabels);
   createCableButtons(cables, tft, cablecolors, cablelabels);
+
+  //Serial.println("Initializing SD card...");
+
+  //if (!SD.begin(53)) {
+   //Serial.println("initialization failed!");
+   //while (1);
+  //}
+  //Serial.println("initialization done.");
+
+  CableDef Icablelist[50];
+  readCableInfo(Icablelist);
 }
 
 void loop(void) {

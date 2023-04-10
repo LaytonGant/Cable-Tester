@@ -2,31 +2,36 @@
 //This is the basic sD card test I have that uses the LCD, MEGA, and sD module all together
 //I need to integrate this into the rest of our GUI 
 #include "sD_Module.h" 
+#include "GUI_Functions.h"
 
-File resultsFile, cableFile;
-String var;
-int firstPin;
 
+
+/*
 void setup() {
 
-  Serial.print("Initializing SD card...");
-
-  if (!SD.begin(53)) {
-    Serial.println("initialization failed!");
-    while (1);
-  }
-  Serial.println("initialization done.");
+  
   CableDef cables[50];
   readCableInfo(cables);
 
 }
+*/
 
 void readCableInfo(struct CableDef cablelist[50]){
+  File cableFile;
   char var;
   String cable, shielding;
   int corPin, cablecount;
   char pins[60];
+  
+  // setup
+  //Serial.println("Initializing SD card...");
 
+  //if (!SD.begin(53)) {
+   //Serial.println("initialization failed!");
+   //while (1);
+  //}
+  //Serial.println("initialization done.");
+  //
 
   cableFile = SD.open("cables.txt");
   if (cableFile) {
@@ -79,8 +84,9 @@ void readCableInfo(struct CableDef cablelist[50]){
   }
 }
 
-void displayTest(struct Results cableResult, Elegoo_TFTLCD tft, File resultsFile) {
+void displayTest(struct Results testResult, Elegoo_TFTLCD tft, File testFile) {
   
+  char dvar;
   unsigned long start = micros();
   tft.setCursor(20, 60);
   tft.setTextColor(SUBPLATE_TCOLOR);
@@ -88,19 +94,19 @@ void displayTest(struct Results cableResult, Elegoo_TFTLCD tft, File resultsFile
   
 
   // re-open the file for reading:
-  resultsFile = SD.open(cableResult.testname);
-  if (resultsFile) {
+  testFile = SD.open(testResult.testname);
+  if (testFile) {
     Serial.println("results file opened");
 
     // read from the file until there's nothing else in it:
-    while (resultsFile.available()) { // <><><><><>This needs to be integrated with the GUI to the History <><><><><>
-      var = char(resultsFile.read());
-      tft.println(F(var));
+    while (testFile.available()) { // <><><><><>This needs to be integrated with the GUI to the History <><><><><>
+      dvar = char(testFile.read());
+      tft.println(dvar);
     }
     // close the file:
     Serial.println("End of File");
     Serial.println();
-    resultsFile.close();
+    testFile.close();
   } else {
     // if the file didn't open, print an error:
     Serial.println("error opening test.txt");
@@ -109,7 +115,7 @@ void displayTest(struct Results cableResult, Elegoo_TFTLCD tft, File resultsFile
 
 
 void writeTest(struct Results cableResult){
- 
+  int firstPin;
   Serial.println(cableResult.testname);
   File resultsFile = SD.open(cableResult.testname, FILE_WRITE);
   //File resultsFile = SD.open("test.txt", FILE_WRITE);
@@ -120,7 +126,7 @@ void writeTest(struct Results cableResult){
   if (resultsFile) {
     Serial.print("Writing to test.txt...");
     resultsFile.println(cableResult.cablename);
-    Serial.print("not yet stuck");
+
     if(cableResult.Continuity == true){
     resultsFile.println("Continuity: True");
     } 

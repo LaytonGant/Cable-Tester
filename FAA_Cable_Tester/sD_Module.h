@@ -13,7 +13,7 @@
 #include "Cable_Definition.h"
 
 void readCableInfo(struct CableDef cablelist[50]);
-void displayTest(struct Results, Elegoo_TFTLCD tft, File cableFile);
-void writeTest(struct Results, File cableFile);
+void displayTest(struct Results testResult, Elegoo_TFTLCD tft, File testFile);
+void writeTest(struct Results cableResult);
 
 #endif
