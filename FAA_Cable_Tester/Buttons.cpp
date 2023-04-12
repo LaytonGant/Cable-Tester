@@ -18,7 +18,7 @@ void createCableButtons(Elegoo_GFX_Button cables[], Elegoo_TFTLCD tft, uint16_t 
       cables[col + row*3].initButton(&tft, 130+col*(CABLEBUTTON_W+CABLEBUTTON_SPACING_X), 
                  85+row*(CABLEBUTTON_H+CABLEBUTTON_SPACING_Y),    // x, y, w, h, outline, fill, text
                   CABLEBUTTON_W, CABLEBUTTON_H, ILI9341_WHITE, cablecolors[col+row*3], ILI9341_WHITE,
-                  cablelabels[col + row*3], BUTTON_TEXTSIZE); 
+                  cablelabels[col*3 + row], BUTTON_TEXTSIZE); 
       cables[col + row*3].drawButton();
     }
   }

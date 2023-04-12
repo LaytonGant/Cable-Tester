@@ -6,7 +6,7 @@
 
 struct CableDef {
        int pin[60];
-       String name;
+       char name[20];
        bool shielding;
 };// RJ45A, RJ45B, RJ11, RJ12UTP, RJ21, D_sub9, D_sub15, D_sub25, HD_sub15,
  // USBA, USBB, USBMini, Amphenol;

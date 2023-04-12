@@ -1,25 +1,14 @@
-
-//This is the basic sD card test I have that uses the LCD, MEGA, and sD module all together
-//I need to integrate this into the rest of our GUI 
+// Grace Bost
 #include "sD_Module.h" 
 #include "GUI_Functions.h"
 
 
-
-/*
-void setup() {
-
-  
-  CableDef cables[50];
-  readCableInfo(cables);
-
-}
-*/
-
-void readCableInfo(struct CableDef cablelist[50]){
+void readCableInfo(struct CableDef cablelist[15]){
   File cableFile;
   char var;
-  String cable, shielding;
+  char buf[20];
+  String cable;
+  String shielding;
   int corPin, cablecount;
   char pins[60];
   
@@ -28,7 +17,7 @@ void readCableInfo(struct CableDef cablelist[50]){
 
   //if (!SD.begin(53)) {
    //Serial.println("initialization failed!");
-   //while (1);
+ // while (1);
   //}
   //Serial.println("initialization done.");
   //
@@ -36,7 +25,7 @@ void readCableInfo(struct CableDef cablelist[50]){
   cableFile = SD.open("cables.txt");
   if (cableFile) {
     Serial.println("cables.txt:");
-    cablecount = 1;
+    cablecount = 0;
 
 
     // read from the file until there's nothing else in it:
@@ -50,7 +39,10 @@ void readCableInfo(struct CableDef cablelist[50]){
         cable += var;
         var = char(cableFile.read());
       }
-      cablelist[cablecount].name = cable;
+    
+      cable.toCharArray(buf,cable.length()+1);
+      strcpy(cablelist[cablecount].name, buf);
+     // _______________________________________
       var = char(cableFile.read());
       while(var != ',')
       {
@@ -67,13 +59,13 @@ void readCableInfo(struct CableDef cablelist[50]){
         //Serial.print(pins[corPin]);
         var = cableFile.read();
         cablelist[cablecount].pin[corPin]=pins[corPin];
-        Serial.print(cablelist[cablecount].pin[corPin]);
+        //Serial.print(cablelist[cablecount].pin[corPin]);
         corPin = corPin + 1;
       }
-      Serial.println();
-      Serial.println("IN THE STRUCT");
-      Serial.println(cablelist[cablecount].name);
-      Serial.println(cablelist[cablecount].shielding);
+      //Serial.println();
+      //Serial.println("IN THE STRUCT");
+      //Serial.println(cablelist[cablecount].name);
+      //Serial.println(cablelist[cablecount].shielding);
       cablecount = cablecount + 1;
     }
     cableFile.close();

@@ -11,6 +11,7 @@
 #include "Cable_Definition.h"
 #include "Cable_Definition.h"
 #include "sD_Module.h"
+
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
 // double up the pins with the touch screen (see the TFT paint example).
@@ -37,25 +38,34 @@ char buttonlabels[4][20] = {"Main", "Results", "History",
 uint16_t buttoncolors[5] = {ILI9341_DARKGREY, ILI9341_DARKGREY, ILI9341_DARKGREY, 
                              ILI9341_DARKGREY, ILI9341_BLUE};
 
-char cablelabels[14][20] = {"RJ45", "RJ45", "RJ45","RJ45","RJ45","RJ45","RJ45","RJ45","RJ45","RJ45","RJ45","RJ45","RJ45","RJ45"};
+char cablelabels[15][20] = {""};
 uint16_t cablecolors[14] = {ILI9341_DARKGREY, ILI9341_LIGHTGREY, ILI9341_DARKGREY, ILI9341_LIGHTGREY, ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, 
 ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY};
                              
 void setup(void) {
+
   Serial.begin(9600);
-  TestCable_Unit();
+  Serial.println("not stuck");
+
+  if (!SD.begin(53)) {
+    Serial.println("initialization failed!");
+    while (1);
+  }
+  //TestCable_Unit();
   Serial.println(F("TFT LCD test"));
 
-#ifdef USE_Elegoo_SHIELD_PINOUT
-  Serial.println(F("Using Elegoo 2.8\" TFT Arduino Shield Pinout"));
-#else
-  Serial.println(F("Using Elegoo 2.8\" TFT Breakout Board Pinout"));
-#endif
+  
+
+  #ifdef USE_Elegoo_SHIELD_PINOUT
+    Serial.println(F("Using Elegoo 2.8\" TFT Arduino Shield Pinout"));
+  #else
+    Serial.println(F("Using Elegoo 2.8\" TFT Breakout Board Pinout"));
+  #endif
 
   Serial.print("TFT size is "); Serial.print(tft.width()); Serial.print("x"); Serial.println(tft.height());
 
   tft.reset();
-// <><><><><><> SETUP <><><><><><>
+  // <><><><><><> SETUP <><><><><><>
   uint16_t identifier = tft.readID();
   if(identifier == 0x9325) {
     Serial.println(F("Found ILI9325 LCD driver"));
@@ -84,29 +94,28 @@ void setup(void) {
     Serial.println(F("matches the tutorial."));
     identifier=0x9341;
   }
-// <><><><><><> SETUP <><><><><><>
+  // <><><><><><> SETUP <><><><><><>
 
-/******************* Begin tft */
+  /******************* Begin tft */
   tft.begin(identifier);
   tft.setRotation(1);
   tft.fillScreen(BLACK);
+
+  CableDef Icablelist[15];
+  readCableInfo(Icablelist);
+
+  for(int index = 0;index < 5; index++){
+    strcpy(cablelabels[index], Icablelist[index].name);
+    Serial.println(cablelabels[index]);
+  }
 
   //create buttons
   drawplate(buttons, tft, buttoncolors, buttonlabels);
   createHomeButtons(buttons, tft, buttoncolors, buttonlabels);
   createCableButtons(cables, tft, cablecolors, cablelabels);
 
-  //Serial.println("Initializing SD card...");
-
-  //if (!SD.begin(53)) {
-   //Serial.println("initialization failed!");
-   //while (1);
-  //}
-  //Serial.println("initialization done.");
-
-  CableDef Icablelist[50];
-  readCableInfo(Icablelist);
-}
+  
+} // END SETUP
 
 void loop(void) {
     digitalWrite(13, HIGH);
