@@ -1,10 +1,11 @@
 #include "GUI_Functions.h"
 
 uint8_t pages = 0;
+uint8_t cablepgnum = 0;
 bool Change = false;
 char textfield_subplate[TEXT_LEN+1] = "Select Cable:";
 
-void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button buttons[], uint16_t buttoncolors[], char buttonlabels[][20],
+void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button cablePageChange[], Elegoo_GFX_Button buttons[], uint16_t buttoncolors[], char buttonlabels[][20],
              Elegoo_GFX_Button cables[], uint16_t cablecolors[], char cablelabels[][20]){
   // if sharing pins, you'll need to fix the directions of the touchscreen pins
   //pinMode(XP, OUTPUT);
@@ -27,12 +28,21 @@ void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button buttons[], uint16_t
     }
   }
 
-for (uint8_t b=0; b<4; b++) {
-    if (cables[b].contains(p.y, p.x)) {
-      //Serial.print("Pressing: "); Serial.println(b);
-      cables[b].press(true);  // tell the button it is pressed
-    } else {
-      cables[b].press(false);  // tell the button it is NOT pressed
+  for (uint8_t b=0; b<5; b++) {
+      if (cables[b].contains(p.y, p.x)) {
+        //Serial.print("Pressing: "); Serial.println(b);
+        cables[b].press(true);  // tell the button it is pressed
+      } else {
+        cables[b].press(false);  // tell the button it is NOT pressed
+      }
+    }
+
+  for (uint8_t b=0; b<2; b++) {
+    if (cablePageChange[b].contains(p.y, p.x)){
+      cablePageChange[b].press(true);
+    }
+    else {
+      cablePageChange[b].press(false);
     }
   }
 
@@ -48,7 +58,7 @@ for (uint8_t b=0; b<4; b++) {
           else {
             Change = true;
             pages = 0;
-            UpdateScreen(buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+            UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
           }
         }
       else if(buttons[b].justReleased()==buttons[1].justReleased()){
@@ -59,7 +69,7 @@ for (uint8_t b=0; b<4; b++) {
           else{
             Change = true;
             pages = 1;
-            UpdateScreen(buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+            UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
           }
       }
       else if(buttons[b].justReleased()==buttons[2].justReleased()){
@@ -70,14 +80,14 @@ for (uint8_t b=0; b<4; b++) {
           else{
             Change = true;
             pages = 2;
-            UpdateScreen(buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+            UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
           }
       }
       else if(buttons[b].justReleased()==buttons[3].justReleased()){
           Change = true;
           pages = 1;
           TestCable();
-          UpdateScreen(buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+          UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
       }
     }
     
@@ -89,9 +99,63 @@ for (uint8_t b=0; b<4; b++) {
     }
   }
   
+  // Checking for Next page now
+  
+  if (cablePageChange[0].justReleased()){
+    if(cablepgnum == 0){
+      cablepgnum = 1;
+      pages = 0;
+      Change = true;
+      UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+    }
+    else if(cablepgnum == 1){
+      cablepgnum = 2;
+      pages = 0;
+      Change = true;
+      UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+    }
+    else if(cablepgnum == 2){
+      cablepgnum = 0;
+      pages = 0;
+      Change = true;
+      UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+    }
+    
+  }
+  else if(cablePageChange[1].justReleased()){
+     if(cablepgnum == 0){
+      Serial.println("Made it");
+      cablepgnum = 2;
+      pages = 0;
+      Change = true;
+      UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+    }
+    else if(cablepgnum == 1){
+      cablepgnum = 0;
+      pages = 0;
+      Change = true;
+      UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+    }
+    else if(cablepgnum == 2){
+      cablepgnum = 1;
+      pages = 0;
+      Change = true;
+      UpdateScreen(cablePageChange, buttons, tft, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+    }
+  }
+
+  for (uint8_t b=0; b<2; b++){
+    if (cablePageChange[b].justPressed()) {
+            cablePageChange[b].drawButton(true);  // draw invert!
+            // if a numberpad button, append the relevant # to the textfield
+
+          delay(100); // UI debouncing
+        }
+  }
+  
 }
 
-void UpdateScreen(Elegoo_GFX_Button buttons[], Elegoo_TFTLCD tft, uint16_t buttoncolors[],
+void UpdateScreen(Elegoo_GFX_Button cablePageChange[], Elegoo_GFX_Button buttons[], Elegoo_TFTLCD tft, uint16_t buttoncolors[],
                  char buttonlabels[][20], Elegoo_GFX_Button cables[], uint16_t cablecolors[], char cablelabels[][20]){
 // Blacks the screen before it checks the conditions to change the page
 tft.fillScreen(BLACK);
@@ -110,6 +174,54 @@ if(Change == true && pages == 0)
       buttons[col + row*4].drawButton();
     }
   }
+
+  if(cablepgnum == 0){
+    Serial.println("page 1 entered");
+    for (uint8_t rowc=0; rowc<5; rowc++) {
+      for (uint8_t colc=0; colc<1; colc++) {
+        cables[colc + rowc*3].initButton(&tft, 130+colc*(CABLEBUTTON_W+CABLEBUTTON_SPACING_X), 
+                  85+rowc*(CABLEBUTTON_H+CABLEBUTTON_SPACING_Y),    // x, y, w, h, outline, fill, text
+                    CABLEBUTTON_W, CABLEBUTTON_H, ILI9341_WHITE, cablecolors[rowc*3], ILI9341_WHITE,
+                    cablelabels[rowc], BUTTON_TEXTSIZE); 
+        cables[colc + rowc*3].drawButton();
+      }
+    }
+  }
+  else if(cablepgnum == 1){
+    Serial.println("page 2 entered");
+    for (uint8_t rowc2=0; rowc2<5; rowc2++) {
+      for (uint8_t colc2=0; colc2<1; colc2++) {
+        cables[colc2 + rowc2+5].initButton(&tft, 130+colc2*(CABLEBUTTON_W+CABLEBUTTON_SPACING_X), 
+                  85+rowc2*(CABLEBUTTON_H+CABLEBUTTON_SPACING_Y),    // x, y, w, h, outline, fill, text
+                    CABLEBUTTON_W, CABLEBUTTON_H, ILI9341_WHITE, cablecolors[rowc2+5], ILI9341_WHITE,
+                    cablelabels[colc2*3 + rowc2+5], BUTTON_TEXTSIZE); 
+        cables[colc2 + rowc2+5].drawButton();
+      }
+    }
+  }
+  else if(cablepgnum == 2){
+    Serial.println("page 3 entered");
+    for (uint8_t rowc3=0; rowc3<5; rowc3++) {
+      for (uint8_t colc3=0; colc3<1; colc3++) {
+        cables[colc3 + rowc3+10].initButton(&tft, 130+colc3*(CABLEBUTTON_W+CABLEBUTTON_SPACING_X), 
+                  85+rowc3*(CABLEBUTTON_H+CABLEBUTTON_SPACING_Y),    // x, y, w, h, outline, fill, text
+                    CABLEBUTTON_W, CABLEBUTTON_H, ILI9341_WHITE, cablecolors[rowc3+10], ILI9341_WHITE,
+                    cablelabels[colc3*3 + rowc3+10], BUTTON_TEXTSIZE); 
+        cables[colc3 + rowc3+10].drawButton();
+      }
+    }
+  }
+
+  cablePageChange[0].initButton(&tft, 285, 125, 50, CABLEBUTTON_H, 
+                  ILI9341_WHITE, ILI9341_LIGHTGREY, ILI9341_WHITE,
+                  "Next", BUTTON_TEXTSIZE); 
+      cablePageChange[0].drawButton();
+  
+  cablePageChange[1].initButton(&tft, 285, 175, 50, CABLEBUTTON_H, 
+                  ILI9341_WHITE, ILI9341_LIGHTGREY, ILI9341_WHITE,
+                  "Back", BUTTON_TEXTSIZE); 
+      cablePageChange[1].drawButton();
+
 }
 
 if(Change == true && pages == 1)

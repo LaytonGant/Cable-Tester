@@ -24,6 +24,6 @@
 #define CABLEBUTTON_SPACING_Y 10 //Button spacing in the y direction
 //---------------------------------------------------------------------------------------------------------------//
 void createHomeButtons(Elegoo_GFX_Button buttons[], Elegoo_TFTLCD tft, uint16_t buttoncolors[], char buttonlabels[][20]);
-void createCableButtons(Elegoo_GFX_Button cables[], Elegoo_TFTLCD tft, uint16_t cablecolors[], char cablelabels[][20]);
+void createCableButtons(Elegoo_GFX_Button cablePageChange[], Elegoo_GFX_Button cables[], Elegoo_TFTLCD tft, uint16_t cablecolors[], char cablelabels[][20]);
 //---------------------------------------------------------------------------------------------------------------//
 #endif

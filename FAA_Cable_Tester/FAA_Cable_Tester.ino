@@ -31,6 +31,7 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 //Button Definitions
 Elegoo_GFX_Button  buttons[10];
 Elegoo_GFX_Button  cables[14];
+Elegoo_GFX_Button  cablePageChange[2];
 
 /* Button Creation */
 char buttonlabels[4][20] = {"Main", "Results", "History",
@@ -39,8 +40,8 @@ uint16_t buttoncolors[5] = {ILI9341_DARKGREY, ILI9341_DARKGREY, ILI9341_DARKGREY
                              ILI9341_DARKGREY, ILI9341_BLUE};
 
 char cablelabels[15][20] = {""};
-uint16_t cablecolors[14] = {ILI9341_DARKGREY, ILI9341_LIGHTGREY, ILI9341_DARKGREY, ILI9341_LIGHTGREY, ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, 
-ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY};
+uint16_t cablecolors[15] = {ILI9341_DARKGREY, ILI9341_LIGHTGREY, ILI9341_DARKGREY, ILI9341_LIGHTGREY, ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, 
+ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY, ILI9341_LIGHTGREY,ILI9341_DARKGREY };
                              
 void setup(void) {
 
@@ -104,15 +105,15 @@ void setup(void) {
   CableDef Icablelist[15];
   readCableInfo(Icablelist);
 
-  for(int index = 0;index < 5; index++){
+  for(int index = 0;index < 15; index++){
     strcpy(cablelabels[index], Icablelist[index].name);
-    Serial.println(cablelabels[index]);
+    //Serial.println(cablelabels[index]);
   }
 
   //create buttons
   drawplate(buttons, tft, buttoncolors, buttonlabels);
   createHomeButtons(buttons, tft, buttoncolors, buttonlabels);
-  createCableButtons(cables, tft, cablecolors, cablelabels);
+  createCableButtons(cablePageChange, cables, tft, cablecolors, cablelabels);
 
   
 } // END SETUP
@@ -122,6 +123,6 @@ void loop(void) {
     TSPoint p = ts.getPoint();
     digitalWrite(13, LOW);
 
-      GUI_Run(p, tft, buttons, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
+      GUI_Run(p, tft, cablePageChange, buttons, buttoncolors, buttonlabels, cables, cablecolors, cablelabels);
  
 }

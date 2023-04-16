@@ -12,7 +12,7 @@ void createHomeButtons(Elegoo_GFX_Button buttons[], Elegoo_TFTLCD tft, uint16_t 
   }
 }
 
-void createCableButtons(Elegoo_GFX_Button cables[], Elegoo_TFTLCD tft, uint16_t cablecolors[], char cablelabels[][20]){
+void createCableButtons(Elegoo_GFX_Button cablePageChange[], Elegoo_GFX_Button cables[], Elegoo_TFTLCD tft, uint16_t cablecolors[], char cablelabels[][20]){
   for (uint8_t row=0; row<5; row++) {
     for (uint8_t col=0; col<1; col++) {
       cables[col + row*3].initButton(&tft, 130+col*(CABLEBUTTON_W+CABLEBUTTON_SPACING_X), 
@@ -22,5 +22,16 @@ void createCableButtons(Elegoo_GFX_Button cables[], Elegoo_TFTLCD tft, uint16_t 
       cables[col + row*3].drawButton();
     }
   }
+
+  cablePageChange[0].initButton(&tft, 285, 125, 50, CABLEBUTTON_H, 
+                  ILI9341_WHITE, ILI9341_LIGHTGREY, ILI9341_WHITE,
+                  "Next", BUTTON_TEXTSIZE); 
+      cablePageChange[0].drawButton();
+  
+  cablePageChange[1].initButton(&tft, 285, 175, 50, CABLEBUTTON_H, 
+                  ILI9341_WHITE, ILI9341_LIGHTGREY, ILI9341_WHITE,
+                  "Back", BUTTON_TEXTSIZE); 
+      cablePageChange[1].drawButton();
+
 }
 

@@ -80,10 +80,10 @@
 #define MINPRESSURE 10
 #define MAXPRESSURE 1000
 
-void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button buttons[], uint16_t b[], char bl[][20],
+void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button cablePageChange[], Elegoo_GFX_Button buttons[], uint16_t b[], char bl[][20],
                    Elegoo_GFX_Button cables[], uint16_t c[], char cl[][20]);
 void drawplate(Elegoo_GFX_Button buttons[], Elegoo_TFTLCD tft, uint16_t buttoncolors[], char buttonlabels[][20]);
-void UpdateScreen(Elegoo_GFX_Button buttons[], Elegoo_TFTLCD tft, uint16_t b[], char bl[][20],
+void UpdateScreen(Elegoo_GFX_Button cablePageChange[], Elegoo_GFX_Button buttons[], Elegoo_TFTLCD tft, uint16_t b[], char bl[][20],
                    Elegoo_GFX_Button cables[], uint16_t c[], char cl[][20]);
 
 //---------------------------------------------------------------------------------------------------------------//
