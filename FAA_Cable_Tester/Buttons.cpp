@@ -15,11 +15,11 @@ void createHomeButtons(Elegoo_GFX_Button buttons[], Elegoo_TFTLCD tft, uint16_t 
 void createCableButtons(Elegoo_GFX_Button cablePageChange[], Elegoo_GFX_Button cables[], Elegoo_TFTLCD tft, uint16_t cablecolors[], char cablelabels[][20]){
   for (uint8_t row=0; row<5; row++) {
     for (uint8_t col=0; col<1; col++) {
-      cables[col + row*3].initButton(&tft, 130+col*(CABLEBUTTON_W+CABLEBUTTON_SPACING_X), 
+      cables[row].initButton(&tft, 130, 
                  85+row*(CABLEBUTTON_H+CABLEBUTTON_SPACING_Y),    // x, y, w, h, outline, fill, text
-                  CABLEBUTTON_W, CABLEBUTTON_H, ILI9341_WHITE, cablecolors[col+row*3], ILI9341_WHITE,
-                  cablelabels[col*3 + row], BUTTON_TEXTSIZE); 
-      cables[col + row*3].drawButton();
+                  CABLEBUTTON_W, CABLEBUTTON_H, ILI9341_WHITE, cablecolors[row], ILI9341_WHITE,
+                  cablelabels[row], BUTTON_TEXTSIZE); 
+      cables[row].drawButton();
     }
   }
 

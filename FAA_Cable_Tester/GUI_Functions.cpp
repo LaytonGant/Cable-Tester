@@ -2,6 +2,7 @@
 
 uint8_t pages = 0;
 uint8_t cablepgnum = 0;
+uint8_t cablechoice = 0;
 bool Change = false;
 char textfield_subplate[TEXT_LEN+1] = "Select Cable:";
 
@@ -14,8 +15,10 @@ void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button cablePageChange[], 
 
   if (p.z > MINPRESSURE && p.z < MAXPRESSURE) {
     // scale from 0->1023 to tft.width
-     p.x = map(p.x, TS_MAXX, TS_MINX, 0, tft.width());
-     p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.width());
+    // p.x = map(p.x, TS_MAXX, TS_MINX, 0, tft.width());
+    // p.y = map(p.y, TS_MAXY, TS_MINY, 0, tft.height());
+    p.x = map(p.x, TS_MAXY, TS_MINY, 0, tft.height()); // rotate & scale to TFT boundaries
+    p.y = map(p.y, TS_MAXX, TS_MINX, 0, tft.width());    //   ... USB port at upper left
    }
    
   // go thru all the buttons, checking if they were pressed
@@ -27,8 +30,29 @@ void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button cablePageChange[], 
       buttons[b].press(false);  // tell the button it is NOT pressed
     }
   }
-
-  for (uint8_t b=0; b<5; b++) {
+  
+  if(cablepgnum == 0){
+    for (uint8_t b=0; b<5; b++) {
+      if (cables[b].contains(p.y, p.x)) {
+        //Serial.print("cable contained");
+        cables[b].press(true);  // tell the button it is pressed
+      } else {
+        cables[b].press(false);  // tell the button it is NOT pressed
+      }
+    }
+  }
+  else if(cablepgnum == 1){
+    for (uint8_t b=5; b<10; b++) {
+      if (cables[b].contains(p.y, p.x)) {
+        //Serial.print("Pressing: "); Serial.println(b);
+        cables[b].press(true);  // tell the button it is pressed
+      } else {
+        cables[b].press(false);  // tell the button it is NOT pressed
+      }
+    }    
+  }
+  else if(cablepgnum == 2){
+    for (uint8_t b=10; b<15; b++) {
       if (cables[b].contains(p.y, p.x)) {
         //Serial.print("Pressing: "); Serial.println(b);
         cables[b].press(true);  // tell the button it is pressed
@@ -36,6 +60,8 @@ void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button cablePageChange[], 
         cables[b].press(false);  // tell the button it is NOT pressed
       }
     }
+  }
+  
 
   for (uint8_t b=0; b<2; b++) {
     if (cablePageChange[b].contains(p.y, p.x)){
@@ -99,8 +125,97 @@ void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button cablePageChange[], 
     }
   }
   
-  // Checking for Next page now
-  
+  // NOW FOR CABLE CHECKING 
+  if (cablepgnum == 0){
+    for (uint8_t b=0; b<5; b++){
+      if (cables[b].justReleased()){
+        if (cables[b].justReleased()==cables[0].justReleased()){
+          cablechoice = 0;
+          //Serial.println("button 0 pressed");
+        }
+        else if(cables[b].justReleased()==cables[1].justReleased()){
+          cablechoice = 1;
+          //Serial.println("button 1 pressed");
+        }
+        else if(cables[b].justReleased()==cables[2].justReleased()){
+          cablechoice = 2;
+          //Serial.println("button 2 pressed");
+        }
+        else if(cables[b].justReleased()==cables[3].justReleased()){
+          cablechoice = 3;
+          //Serial.println("button 3 pressed");
+        }
+        else if(cables[b].justReleased()==cables[4].justReleased()){
+          cablechoice = 4;
+          //Serial.println("button 4 pressed");
+        }
+      }
+      
+      if (cables[b].justPressed()) {
+          cables[b].drawButton(true);  // draw invert!
+        // if a numberpad button, append the relevant # to the textfield
+
+          delay(100); // UI debouncing
+      }
+    }
+  }
+  else if(cablepgnum == 1){
+    for (uint8_t b=5; b<10; b++){
+      if (cables[b].justReleased()){
+      if(cables[b].justReleased()==cables[5].justReleased()){
+          cablechoice = 5;
+        }
+        else if(cables[b].justReleased()==cables[6].justReleased()){
+          cablechoice = 6;
+        }
+        else if(cables[b].justReleased()==cables[7].justReleased()){
+          cablechoice = 7;
+        }
+        else if(cables[b].justReleased()==cables[8].justReleased()){
+          cablechoice = 8;
+        }
+        else if(cables[b].justReleased()==cables[9].justReleased()){
+          cablechoice = 9;
+        }
+      }
+      
+      if (cables[b].justPressed()) {
+        cables[b].drawButton(true);  // draw invert!
+        // if a numberpad button, append the relevant # to the textfield
+
+        delay(100); // UI debouncing
+      }
+    }
+  }
+  else if(cablepgnum == 2){
+    for (uint8_t b=10; b<15; b++){
+      if (cables[b].justReleased()){
+      if(cables[b].justReleased()==cables[10].justReleased()){
+          cablechoice = 10;
+        }
+        else if(cables[b].justReleased()==cables[11].justReleased()){
+          cablechoice = 11;
+        }
+        else if(cables[b].justReleased()==cables[12].justReleased()){
+          cablechoice = 12;
+        }
+        else if(cables[b].justReleased()==cables[13].justReleased()){
+          cablechoice = 13;
+        }
+        else if(cables[b].justReleased()==cables[14].justReleased()){
+          cablechoice = 14;
+        }
+      }   
+      if (cables[b].justPressed()) {
+        cables[b].drawButton(true);  // draw invert!
+        // if a numberpad button, append the relevant # to the textfield
+
+        delay(100); // UI debouncing
+      }   
+    }
+  }
+    
+  // CHECK THE CABLE PAGES
   if (cablePageChange[0].justReleased()){
     if(cablepgnum == 0){
       cablepgnum = 1;
@@ -124,7 +239,6 @@ void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button cablePageChange[], 
   }
   else if(cablePageChange[1].justReleased()){
      if(cablepgnum == 0){
-      Serial.println("Made it");
       cablepgnum = 2;
       pages = 0;
       Change = true;
@@ -153,7 +267,7 @@ void GUI_Run(TSPoint p, Elegoo_TFTLCD tft, Elegoo_GFX_Button cablePageChange[], 
         }
   }
   
-}
+} // End GUI RUN
 
 void UpdateScreen(Elegoo_GFX_Button cablePageChange[], Elegoo_GFX_Button buttons[], Elegoo_TFTLCD tft, uint16_t buttoncolors[],
                  char buttonlabels[][20], Elegoo_GFX_Button cables[], uint16_t cablecolors[], char cablelabels[][20]){
@@ -179,11 +293,11 @@ if(Change == true && pages == 0)
     Serial.println("page 1 entered");
     for (uint8_t rowc=0; rowc<5; rowc++) {
       for (uint8_t colc=0; colc<1; colc++) {
-        cables[colc + rowc*3].initButton(&tft, 130+colc*(CABLEBUTTON_W+CABLEBUTTON_SPACING_X), 
+        cables[colc + rowc].initButton(&tft, 130+colc*(CABLEBUTTON_W+CABLEBUTTON_SPACING_X), 
                   85+rowc*(CABLEBUTTON_H+CABLEBUTTON_SPACING_Y),    // x, y, w, h, outline, fill, text
-                    CABLEBUTTON_W, CABLEBUTTON_H, ILI9341_WHITE, cablecolors[rowc*3], ILI9341_WHITE,
+                    CABLEBUTTON_W, CABLEBUTTON_H, ILI9341_WHITE, cablecolors[rowc], ILI9341_WHITE,
                     cablelabels[rowc], BUTTON_TEXTSIZE); 
-        cables[colc + rowc*3].drawButton();
+        cables[colc + rowc].drawButton();
       }
     }
   }
